@@ -33,6 +33,21 @@ const User = mongoose.model('User', UserSchema);
 
 const JWT_SECRET = 'your-secret-key'; // In production, use environment variable
 
+const authenticateToken = (req, res, next) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  if (!token) {
+    return res.status(401).json({ message: 'No token provided' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.userId = decoded.userId;
+    next();
+  } catch (error) {
+    return res.status(401).json({ message: 'Invalid token' });
+  }
+};
+
 // API Routes
 app.post('/api/login', async (req, res) => {
   try {
@@ -60,8 +75,27 @@ app.get('/api/products', async (req, res) => {
   res.json(products);
 });
 
-app.post('/api/favorites', async (req, res) => {
-  // Implement favorites logic
+app.post('/api/favorites', authenticateToken, async (req, res) => {
+  try {
+    const { userId, productId } = req.body;
+    if (req.userId !== userId) {
+      return res.status(403).json({ message: 'Unauthorized' });
+    }
+    
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    if (!user.favorites.includes(productId)) {
+      user.favorites.push(productId);
+      await user.save();
+    }
+
+    res.json({ favorites: user.favorites });
+  } catch (error) {
+    res.status(500).json({ message: 'Error adding to favorites' });
+  }
 });
 
 app.get('/api/validate-token', async (req, res) => {
@@ -141,6 +175,43 @@ app.get('/api/seed-products', async (req, res) => {
       error: error.message,
       stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
     });
+  }
+});
+
+app.delete('/api/favorites', authenticateToken, async (req, res) => {
+  try {
+    const { userId, productId } = req.body;
+    if (req.userId !== userId) {
+      return res.status(403).json({ message: 'Unauthorized' });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    user.favorites = user.favorites.filter(id => id.toString() !== productId);
+    await user.save();
+    
+    res.json({ favorites: user.favorites });
+  } catch (error) {
+    res.status(500).json({ message: 'Error removing from favorites' });
+  }
+});
+
+app.get('/api/favorites/:userId', authenticateToken, async (req, res) => {
+  try {
+    if (req.userId !== req.params.userId) {
+      return res.status(403).json({ message: 'Unauthorized' });
+    }
+
+    const user = await User.findById(req.params.userId).populate('favorites');
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.json(user.favorites);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching favorites' });
   }
 });
 

@@ -44,3 +44,22 @@
     color: white;
     cursor: pointer;
 }
+
+.buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.favoriteBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: white;
+  padding: 5px;
+}
+
+.favoriteBtn:hover {
+  transform: scale(1.1);
+}
