@@ -1,22 +1,26 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { CartProvider } from './contexts/CartContext';
 import Navbar from './components/Layout/Navbar';
-import Shop from './pages/Shop';
+import Home from './pages/Shop';
 import Cart from './pages/Cart';
-import Favorites from './pages/Favorites';
 import Login from './pages/Login';
+import Favorites from './pages/Favorites';
+import './App.css';
 
 function App() {
   return (
-    <div>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Shop />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/favorites" element={<Favorites />} />
-        <Route path="/login" element={<Login />} />
-      </Routes>
-    </div>
+    <CartProvider>
+      <div className="App">
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/favorites" element={<Favorites />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/login" element={<Login />} />
+        </Routes>
+      </div>
+    </CartProvider>
   );
 }
 

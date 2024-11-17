@@ -3,10 +3,12 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const path = require('path');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 mongoose.connect('mongodb://127.0.0.1:27017/shop_database')
   .then(() => console.log('Successfully connected to MongoDB.'))
@@ -14,10 +16,9 @@ mongoose.connect('mongodb://127.0.0.1:27017/shop_database')
 
 // Product Schema
 const ProductSchema = new mongoose.Schema({
-  name: String,
+  productName: String,
   price: Number,
-  description: String,
-  image: String,
+  productImage: String
 });
 
 // User Schema
@@ -96,22 +97,39 @@ app.get('/api/seed-products', async (req, res) => {
     // Insert new products
     const products = await Product.insertMany([
       {
-        name: 'Product 1',
-        price: 29.99,
-        description: 'This is product 1 description',
-        image: 'https://via.placeholder.com/150'
+        productName: "purple pearl chainmail choker",
+        price: 35.0,
+        productImage: "http://localhost:5000/images/1.jpeg"
       },
       {
-        name: 'Product 2',
-        price: 39.99,
-        description: 'This is product 2 description',
-        image: 'https://via.placeholder.com/150'
+        productName: "silver pearl chainmail choker",
+        price: 35.0,
+        productImage: "http://localhost:5000/images/2.jpeg"
       },
       {
-        name: 'Product 3',
-        price: 49.99,
-        description: 'This is product 3 description',
-        image: 'https://via.placeholder.com/150'
+        productName: "beaded necklace",
+        price: 25.0,
+        productImage: "http://localhost:5000/images/3.jpeg"
+      },
+      {
+        productName: "purple pearl beaded chainmail necklace",
+        price: 40.0,
+        productImage: "http://localhost:5000/images/4.jpeg"
+      },
+      {
+        productName: "brown beaded chainmail choker",
+        price: 30.0,
+        productImage: "http://localhost:5000/images/5.jpeg"
+      },
+      {
+        productName: "flower pendant chain choker",
+        price: 25.0,
+        productImage: "http://localhost:5000/images/6.jpeg"
+      },
+      {
+        productName: "crystal chainmail choker",
+        price: 35.0,
+        productImage: "http://localhost:5000/images/7.jpeg"
       }
     ]);
 

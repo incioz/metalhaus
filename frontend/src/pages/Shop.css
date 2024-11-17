@@ -1,0 +1,18 @@
+.shop {
+    justify-content: center;
+    margin-top: 50px;
+}
+
+.subTitle {
+    font-size: 30px;
+    padding-left: 85px;
+}
+
+.products {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}

@@ -1,36 +1,29 @@
-import React, { useContext } from 'react';
-import { AppBar, Toolbar, Typography, Button, Badge } from '@mui/material';
-import { ShoppingCart, Favorite } from '@mui/icons-material';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { AuthContext } from '../../contexts/AuthContext';
-import { CartContext } from '../../contexts/CartContext';
+import './Navbar.css';
+import { CiHeart } from "react-icons/ci";
+import { CiShoppingCart } from "react-icons/ci";
+import { CiUser } from "react-icons/ci";
 
-const Navbar = () => {
-  const { isAuthenticated, logout } = useContext(AuthContext);
-  const { cartItems } = useContext(CartContext);
-
+function Navbar() {
   return (
-    <AppBar position="static">
-      <Toolbar>
-        <Typography variant="h6" component={Link} to="/" sx={{ flexGrow: 1, textDecoration: 'none', color: 'white' }}>
-          Shop
-        </Typography>
-        <Button color="inherit" component={Link} to="/favorites">
-          <Favorite />
-        </Button>
-        <Button color="inherit" component={Link} to="/cart">
-          <Badge badgeContent={cartItems.length} color="secondary">
-            <ShoppingCart />
-          </Badge>
-        </Button>
-        {isAuthenticated ? (
-          <Button color="inherit" onClick={logout}>Logout</Button>
-        ) : (
-          <Button color="inherit" component={Link} to="/login">Login</Button>
-        )}
-      </Toolbar>
-    </AppBar>
+    <nav className="navbar">
+      <div className="logo">
+        <Link to="/">METALHAUS</Link>
+      </div>
+      <div className="links">
+        <Link to="/favorites">
+          <CiHeart className="icons" size={30} />
+        </Link>
+        <Link to="/cart">
+          <CiShoppingCart className="icons" size={30} />
+        </Link>
+        <Link to="/login">
+          <CiUser className="icons" size={30} />
+        </Link>
+      </div>
+    </nav>
   );
-};
+}
 
 export default Navbar;
