@@ -8,7 +8,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect('mongodb://127.0.0.1:27017/shop_database');
+mongoose.connect('mongodb://127.0.0.1:27017/shop_database')
+  .then(() => console.log('Successfully connected to MongoDB.'))
+  .catch(err => console.error('Could not connect to MongoDB:', err));
 
 // Product Schema
 const ProductSchema = new mongoose.Schema({
@@ -78,6 +80,49 @@ app.get('/api/validate-token', async (req, res) => {
     res.json({ user: { id: user._id, email: user.email } });
   } catch (error) {
     res.status(401).json({ message: 'Invalid token' });
+  }
+});
+
+app.get('/api/seed-products', async (req, res) => {
+  try {
+    // Verify MongoDB connection
+    if (mongoose.connection.readyState !== 1) {
+      return res.status(500).json({ message: 'Database not connected' });
+    }
+
+    // Clear existing products
+    await Product.deleteMany({});
+
+    // Insert new products
+    const products = await Product.insertMany([
+      {
+        name: 'Product 1',
+        price: 29.99,
+        description: 'This is product 1 description',
+        image: 'https://via.placeholder.com/150'
+      },
+      {
+        name: 'Product 2',
+        price: 39.99,
+        description: 'This is product 2 description',
+        image: 'https://via.placeholder.com/150'
+      },
+      {
+        name: 'Product 3',
+        price: 49.99,
+        description: 'This is product 3 description',
+        image: 'https://via.placeholder.com/150'
+      }
+    ]);
+
+    res.json({ message: 'Products seeded successfully', products });
+  } catch (error) {
+    console.error('Error seeding products:', error);
+    res.status(500).json({ 
+      message: 'Error seeding products', 
+      error: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
   }
 });
 
