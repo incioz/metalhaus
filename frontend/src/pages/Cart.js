@@ -50,7 +50,7 @@ const Cart = () => {
         </div>
         <div className="cart-summary">
           <div className="total">
-            <span>Total:</span>
+            <span>total:</span>
             <span>${total}</span>
           </div>
           <button className="checkout-button" onClick={handleCheckout}>

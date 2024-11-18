@@ -15,12 +15,12 @@ const SignupForm = () => {
     setError('');
 
     if (password !== confirmPassword) {
-      setError('Passwords do not match');
+      setError('passwords do not match');
       return;
     }
 
     if (password.length < 8) {
-      setError('Password must be at least 8 characters long');
+      setError('password must be at least 8 characters long');
       return;
     }
 
@@ -33,19 +33,19 @@ const SignupForm = () => {
       localStorage.setItem('token', response.data.token);
       navigate('/login');
     } catch (error) {
-      setError(error.response?.data?.message || 'Error creating account');
+      setError(error.response?.data?.message || 'error creating account');
     }
   };
 
   return (
     <div className="auth-form-container">
-      <h2>Sign Up</h2>
+      <h2>sign up</h2>
       {error && <div className="error-message">{error}</div>}
       <form onSubmit={handleSubmit} className="auth-form">
         <div className="form-group">
           <input
             type="email"
-            placeholder="Email"
+            placeholder="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -54,7 +54,7 @@ const SignupForm = () => {
         <div className="form-group">
           <input
             type="password"
-            placeholder="Password (min. 8 characters)"
+            placeholder="password (min. 8 characters)"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             minLength="8"
@@ -64,17 +64,17 @@ const SignupForm = () => {
         <div className="form-group">
           <input
             type="password"
-            placeholder="Confirm Password"
+            placeholder="confirm password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             minLength="8"
             required
           />
         </div>
-        <button type="submit" className="auth-button">Sign Up</button>
+        <button type="submit" className="auth-button">sign up</button>
       </form>
       <p className="auth-switch">
-        Already have an account? <span onClick={() => navigate('/login')}>Login</span>
+        already have an account? <span onClick={() => navigate('/login')}>login</span>
       </p>
     </div>
   );

@@ -24,13 +24,13 @@ const LoginForm = () => {
 
   return (
     <div className="auth-form-container">
-      <h2>Login</h2>
+      <h2>login</h2>
       {error && <div className="error-message">{error}</div>}
       <form onSubmit={handleSubmit} className="auth-form">
         <div className="form-group">
           <input
             type="email"
-            placeholder="Email"
+            placeholder="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -39,16 +39,16 @@ const LoginForm = () => {
         <div className="form-group">
           <input
             type="password"
-            placeholder="Password"
+            placeholder="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
         </div>
-        <button type="submit" className="auth-button">Login</button>
+        <button type="submit" className="auth-button">login</button>
       </form>
       <p className="auth-switch">
-        Don't have an account? <span onClick={() => navigate('/signup')}>Sign up</span>
+        don't have an account? <span onClick={() => navigate('/signup')}>sign up</span>
       </p>
     </div>
   );

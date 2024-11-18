@@ -22,6 +22,8 @@
   border-radius: 4px;
   background-color: transparent;
   color: white;
+  font-family: 'MedievalSharp';
+  font-size: 15px;
 }
 
 .auth-button {
@@ -32,6 +34,8 @@
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.3s ease;
+  font-family: 'MedievalSharp';
+  font-size: 15px;
 }
 
 .auth-button:hover {
