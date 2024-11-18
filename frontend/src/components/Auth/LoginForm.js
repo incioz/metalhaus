@@ -18,7 +18,7 @@ const LoginForm = () => {
     if (success) {
       navigate('/');
     } else {
-      setError('Invalid credentials');
+      setError('invalid credentials');
     }
   };
 
