@@ -1,12 +1,16 @@
 import React, { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthContext';
+import { CartContext } from '../../contexts/CartContext';
 import './Navbar.css';
 import { CiHeart, CiShoppingCart, CiUser, CiLogout } from "react-icons/ci";
 
 function Navbar() {
   const { isAuthenticated, logout } = useContext(AuthContext);
+  const { cartItems } = useContext(CartContext);
   const navigate = useNavigate();
+
+  const cartQuantity = cartItems.reduce((total, item) => total + item.quantity, 0);
 
   const handleAuthClick = () => {
     if (isAuthenticated) {
@@ -26,8 +30,11 @@ function Navbar() {
         <Link to="/favorites">
           <CiHeart className="icons" size={30} />
         </Link>
-        <Link to="/cart">
+        <Link to="/cart" className="cart-icon">
           <CiShoppingCart className="icons" size={30} />
+          {isAuthenticated && cartQuantity > 0 && (
+            <span className="cart-badge">{cartQuantity}</span>
+          )}
         </Link>
         <button onClick={handleAuthClick} className="auth-icon-button">
           {isAuthenticated ? 

@@ -7,11 +7,14 @@ import { CiHeart } from "react-icons/ci";
 import { FaHeart } from "react-icons/fa";
 
 const ProductCard = ({ product }) => {
-  const { addToCart } = useContext(CartContext);
+  const { addToCart, cartItems, updateQuantity } = useContext(CartContext);
   const { favorites, addToFavorites, removeFromFavorites } = useContext(FavoritesContext);
   const { isAuthenticated } = useContext(AuthContext);
 
   const isFavorite = favorites.some(fav => fav._id === product._id);
+  const cartItem = cartItems.find(item => item._id === product._id);
+  const quantity = cartItem ? cartItem.quantity : 0;
+  const isMaxQuantity = quantity >= 2;
 
   const handleFavoriteClick = () => {
     if (!isAuthenticated) {
@@ -30,16 +33,34 @@ const ProductCard = ({ product }) => {
     <div className="product">
       <img src={product.productImage || 'https://via.placeholder.com/350'} alt={product.productName} />
       <div className="description">
-        <h3>{product.productName}</h3>
+        <p>{product.productName}</p>
         <p>${product.price}</p>
-        <div className="buttons">
-          <button className="addToCartBttn" onClick={() => addToCart(product)}>
-            add to cart
-          </button>
-          <button className="favoriteBtn" onClick={handleFavoriteClick}>
-            {isFavorite ? <FaHeart color="red" /> : <CiHeart />}
-          </button>
-        </div>
+        {isAuthenticated && (
+          <div className="buttons">
+            <div className="cart-controls">
+              {quantity > 0 ? (
+                <div className="quantity-controls">
+                  <button onClick={() => updateQuantity(product._id, quantity - 1)}>-</button>
+                  <span>{quantity}</span>
+                  <button 
+                    onClick={() => updateQuantity(product._id, quantity + 1)}
+                    disabled={isMaxQuantity}
+                  >+</button>
+                </div>
+              ) : (
+                <button 
+                  className="addToCartBttn" 
+                  onClick={() => addToCart(product)}
+                >
+                  add to cart
+                </button>
+              )}
+            </div>
+            <button className="favoriteBtn" onClick={handleFavoriteClick}>
+              {isFavorite ? <FaHeart color="red" /> : <CiHeart />}
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
