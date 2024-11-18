@@ -37,6 +37,8 @@
     padding-bottom: 5px;
     border-radius: 15px;
     color: white;
+    font-family: 'MedievalSharp';
+    font-size: 15px;
 }
 
 .addToCartBttn:hover {

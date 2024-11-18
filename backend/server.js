@@ -215,5 +215,45 @@ app.get('/api/favorites/:userId', authenticateToken, async (req, res) => {
   }
 });
 
+app.post('/api/signup', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    
+    // Password validation
+    if (password.length < 8) {
+      return res.status(400).json({ message: 'Password must be at least 8 characters long' });
+    }
+
+    // Check if user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: 'User already exists' });
+    }
+
+    // Hash password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // Create new user
+    const user = new User({
+      email,
+      password: hashedPassword,
+      favorites: []
+    });
+
+    await user.save();
+
+    // Generate token
+    const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '24h' });
+    
+    res.status(201).json({
+      token,
+      user: { id: user._id, email: user.email }
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Error creating user' });
+  }
+});
+
 const PORT = 5000;
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));

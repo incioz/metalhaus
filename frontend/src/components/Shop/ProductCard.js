@@ -34,7 +34,7 @@ const ProductCard = ({ product }) => {
         <p>${product.price}</p>
         <div className="buttons">
           <button className="addToCartBttn" onClick={() => addToCart(product)}>
-            Add To Cart
+            add to cart
           </button>
           <button className="favoriteBtn" onClick={handleFavoriteClick}>
             {isFavorite ? <FaHeart color="red" /> : <CiHeart />}

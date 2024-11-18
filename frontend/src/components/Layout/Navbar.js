@@ -1,11 +1,22 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../contexts/AuthContext';
 import './Navbar.css';
-import { CiHeart } from "react-icons/ci";
-import { CiShoppingCart } from "react-icons/ci";
-import { CiUser } from "react-icons/ci";
+import { CiHeart, CiShoppingCart, CiUser, CiLogout } from "react-icons/ci";
 
 function Navbar() {
+  const { isAuthenticated, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleAuthClick = () => {
+    if (isAuthenticated) {
+      logout();
+      navigate('/');
+    } else {
+      navigate('/login');
+    }
+  };
+
   return (
     <nav className="navbar">
       <div className="logo">
@@ -18,9 +29,12 @@ function Navbar() {
         <Link to="/cart">
           <CiShoppingCart className="icons" size={30} />
         </Link>
-        <Link to="/login">
-          <CiUser className="icons" size={30} />
-        </Link>
+        <button onClick={handleAuthClick} className="auth-icon-button">
+          {isAuthenticated ? 
+            <CiLogout className="icons" size={30} /> :
+            <CiUser className="icons" size={30} />
+          }
+        </button>
       </div>
     </nav>
   );

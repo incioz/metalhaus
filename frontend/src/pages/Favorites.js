@@ -11,7 +11,7 @@ const Favorites = () => {
   if (!isAuthenticated) {
     return (
       <div className="shop">
-        <h2>Please log in to view your favorites</h2>
+        <div className="subTitle">please log in to view your favorites</div>
       </div>
     );
   }
